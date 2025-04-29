@@ -1,0 +1,46 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install java17
+  apt:
+    name: openjdk-17-jdk
+    state: latest
+  become: true
+
+- name: Import Jenkins key
+  apt_key:
+    state: present
+    url: https://pkg.jenkins.io/redhat/jenkins.io-2023.key
+  become: true
+
+- name: Add Jenkins repository
+  apt_repository:
+    repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+    filename: jenkins
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+
+
+- name: Start Jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: Print initial admin password
+  command: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: initial_password
+  changed_when: false
+  
+- name: Show initial admin password
+  debug:
+    msg: "Initial Jenkins admin password is {{ initial_password.stdout }}"
