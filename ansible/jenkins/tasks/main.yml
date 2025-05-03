@@ -29,7 +29,6 @@
     name: jenkins
     state: present
 
-
 - name: Start Jenkins service
   service:
     name: jenkins

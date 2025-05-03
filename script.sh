@@ -20,5 +20,3 @@ function create_instance() {
 
 prepare_bastion
 create_instance
-
-
